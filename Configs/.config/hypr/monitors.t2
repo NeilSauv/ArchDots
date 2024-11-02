@@ -4,8 +4,14 @@
 
 # See https://wiki.hyprland.org/Configuring/Monitors/
 
-# monitor = ,preferred,auto,auto
-monitor = DP-1, 2560x1080@144, 0x0, 1
+# Écran gauche (DP-1, résolution inférieure)
+monitor=DP-1,1024x768@60,0x0,1.0
+
+# Écran central (HDMI-A-2)
+monitor=HDMI-A-2,1920x1080@60,1024x0,1.0
+
+# Écran droit (HDMI-A-1, déplacé à droite)
+monitor=HDMI-A-1,1920x1080@60,2944x0,1.0
 
 
 # █▀▄▀█ █ █▀ █▀▀
