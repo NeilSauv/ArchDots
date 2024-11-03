@@ -12,7 +12,7 @@ emote                                                # emoji picker gtk3
 # --------------------------------------------------- // Gaming
 steam                                                  # gaming platform
 gamemode                                               # daemon and library for game optimisations
-mangohud                                               # system performance overlay
+#mangohud                                               # system performance overlay
 gamescope                                            # micro-compositor for gaming
 
 # --------------------------------------------------- // Music
