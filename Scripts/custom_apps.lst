@@ -24,3 +24,8 @@ spicetify-cli                                          # cli to customize spotif
 # neovim                                               # vim based text editor
 signal-desktop
 discord
+
+
+# --------------------------------------------------- // Dev
+mingw-w64-gcc
+
