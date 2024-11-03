@@ -1,3 +1,15 @@
+fastfetch
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 # Oh-my-zsh installation path
 ZSH=/usr/share/oh-my-zsh/
 
@@ -5,14 +17,15 @@ ZSH=/usr/share/oh-my-zsh/
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # List of plugins used
-plugins=()
+plugins=( git sudo python zsh-interactive-cd zsh-256color zsh-completions zsh-autosuggestions zsh-syntax-highlighting )
+fpath+=${ZSH_CUSTOM:-${ZSH:-/usr/share/oh-my-zsh}/custom}/plugins/zsh-completions/src
 source $ZSH/oh-my-zsh.sh
 
 # In case a command is not found, try to find the package that has it
 function command_not_found_handler {
     local purple='\e[1;35m' bright='\e[0;1m' green='\e[1;32m' reset='\e[0m'
     printf 'zsh: command not found: %s\n' "$1"
-    local entries=( ${(f)"$(/usr/bin/pacman -F --machinereadable -- "/usr/bin/$1")"} )
+    local entries=( ${(f)"$(${aurhelper:-pacman} -F --machinereadable -- "/usr/bin/$1")"} )
     if (( ${#entries[@]} )) ; then
         printf "${bright}$1${reset} may be found in the following packages:\n"
         local pkg
@@ -82,8 +95,13 @@ alias .5='cd ../../../../..'
 # Always mkdir a path (this doesn't inhibit functionality to make a single dir)
 alias mkdir='mkdir -p'
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# Search history using fzf
+__fzf_history_search() {
+    BUFFER=$(history -n 1 | fzf --tac +s --height 40% --reverse)
+    CURSOR=$#BUFFER
+    zle redisplay
+}
 
-# Display Pokemon
-pokemon-colorscripts --no-title -r 1,3,6
+# Bind Ctrl+R to fzf history search
+zle -N __fzf_history_search
+bindkey '^R' __fzf_history_search

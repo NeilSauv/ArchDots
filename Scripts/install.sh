@@ -46,6 +46,7 @@ while getopts idrs RunStep; do
             echo "d : install hyprland [d]efaults without configs --noconfirm"
             echo "r : [r]estore config files"
             echo "s : enable system [s]ervices"
+            echo "h : display detailed help information"
             exit 1 ;;
     esac
 done
@@ -176,7 +177,6 @@ EOF
         "$HOME/.local/share/bin/themeswitch.sh" &> /dev/null
     fi
 fi
-
 #---------------------#
 # post-install script #
 #---------------------#
@@ -219,3 +219,4 @@ EOF
 
     done < "${scrDir}/system_ctl.lst"
 fi
+

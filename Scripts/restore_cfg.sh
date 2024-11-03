@@ -15,6 +15,8 @@ CfgLst="${1:-"${scrDir}/restore_cfg.lst"}"
 CfgDir="${2:-${cloneDir}/Configs}"
 ThemeOverride="${3:-}"
 
+ETC=/etc
+
 if [ ! -f "${CfgLst}" ] || [ ! -d "${CfgDir}" ]; then
     echo "ERROR: '${CfgLst}' or '${CfgDir}' does not exist..."
     exit 1
@@ -63,11 +65,28 @@ cat "${CfgLst}" | while read lst; do
             mkdir -p "${pth}"
         fi
 
+        # Copie avec gestion des permissions si nécessaire
         if [ ! -f "${pth}/${cfg_chk}" ]; then
-            cp -r "${CfgDir}${tgt}/${cfg_chk}" "${pth}"
+            if [[ "${pth}" == "${ETC}"* ]]; then
+                sudo cp -r "${CfgDir}${tgt}/${cfg_chk}" "${pth}"
+            else
+                cp -r "${CfgDir}${tgt}/${cfg_chk}" "${pth}" 2>/dev/null
+                if [ $? -ne 0 ]; then
+                    echo "Permission denied: Retrying with sudo..."
+                    sudo cp -r "${CfgDir}${tgt}/${cfg_chk}" "${pth}"
+                fi
+            fi
             echo -e "\033[0;32m[restore]\033[0m ${pth} <-- ${CfgDir}${tgt}/${cfg_chk}..."
         elif [ "${ovrWrte}" == "Y" ]; then
-            cp -r "${CfgDir}$tgt/${cfg_chk}" "${pth}"
+            if [[ "${pth}" == "${ETC}"* ]]; then
+                sudo cp -r "${CfgDir}$tgt/${cfg_chk}" "${pth}"
+            else
+                cp -r "${CfgDir}$tgt/${cfg_chk}" "${pth}" 2>/dev/null
+                if [ $? -ne 0 ]; then
+                    echo "Permission denied: Retrying with sudo..."
+                    sudo cp -r "${CfgDir}$tgt/${cfg_chk}" "${pth}"
+                fi
+            fi
             echo -e "\033[0;33m[overwrite]\033[0m ${pth} <-- ${CfgDir}${tgt}/${cfg_chk}..."
         else
             echo -e "\033[0;33m[preserve]\033[0m Skipping ${pth}/${cfg_chk} to preserve user setting..."
@@ -81,3 +100,4 @@ if [ -z "${ThemeOverride}" ]; then
         echo -e 'source = ~/.config/hypr/nvidia.conf # auto sourced vars for nvidia\n' >> "${HOME}/.config/hypr/hyprland.conf"
     fi
 fi
+

@@ -47,6 +47,7 @@ while read -r pkg deps; do
     if pkg_installed "${pkg}"; then
         echo -e "\033[0;33m[skip]\033[0m ${pkg} is already installed..."
     elif pkg_available "${pkg}"; then
+    	echo "here"
         repo=$(pacman -Si "${pkg}" | awk -F ': ' '/Repository / {print $2}')
         echo -e "\033[0;32m[${repo}]\033[0m queueing ${pkg} from official arch repo..."
         archPkg+=("${pkg}")
