@@ -24,6 +24,8 @@ spicetify-cli                                          # cli to customize spotif
 # neovim                                               # vim based text editor
 signal-desktop
 discord
+outlook-for-linux-bin
+thunderbird
 
 
 # --------------------------------------------------- // Dev
