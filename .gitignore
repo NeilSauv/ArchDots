@@ -6,8 +6,7 @@ __pycache__/
 # C extensions
 *.so
 
-# Distribution / packaging
-.Python
+# Distribution / packaging .Python
 env/
 build/
 develop-eggs/
@@ -91,3 +90,8 @@ src
 
 # hyde plugins
 node_modules
+
+dev-only.txt
+dev-req.txt
+tests/
+tox.ini
